@@ -64,10 +64,54 @@ head(CombinedReview2, 3)
 *What were the top 10 rated movie genres?*
 
 ```{r message=FALSE, warning=FALSE}
-Ratings <- mutate(Ratings, rating_date = as_datetime(Ratings$timestamp))
+TopRated <- Movies %>%
+  inner_join(Ratings, by = c("movieId" = "movieId"))%>%
+  group_by(genres) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) %>%
+  slice(1:10)
 
-Tags <- mutate(Tags, tag_date = as_datetime(Tags$timestamp))
+ggplot(data=TopRated,aes(x=reorder(genres,-count),y=count))+
+  geom_bar(stat = 'identity')+
+  ylab("Amount Rated")+
+  xlab("Genres")+
+  labs(title = "Top 10 Most Rated Movie Genres")+
+  theme(axis.text.x=element_text(size=10, angle=55,vjust =0.5))
 
-head(Ratings, 3)
-head(Tags, 3)
 ```
+
+From this bar 0graph we can see the top 10 most rated movie genres. Comedy is the most rated movie genre with it being rated over 7000 times. The second most being Drama with just over 6000, then there is a sharp decline with the tenth most being Action|Adventure|Thriller with about 1500.
+
+*How do the ratings of 1900's and 2000's movies that involve comedy compare with 1900's and 2000's movies that don't involve comedy*
+
+```{r message=FALSE, warning=FALSE}
+pattern2 <- "Comedy"
+
+MovieCompare <- Movies %>%
+  inner_join(Ratings, by = c("movieId" = "movieId")) %>%
+  mutate(release_year1 = str_extract(title,pattern1)) %>%
+  mutate(release_year = parse_number(release_year1)) %>%
+  select(userId, title, release_year,genres,rating) %>%
+  group_by(title, release_year,genres) %>%
+  summarise(rating2 = mean(rating)) %>%
+  na.omit()
+  
+
+MovieCompare <- MovieCompare %>%
+  mutate(marker = ifelse(grepl(pattern2, genres),"Involves Comedy","Does Not Involve Comedy"))
+
+MovieCompare <- MovieCompare %>%
+  mutate(release_year2 = ifelse(release_year <= 1999,"1900's","2000's"))
+  
+
+ggplot(data=MovieCompare, aes(x = release_year2, y = rating2)) + 
+  geom_boxplot(aes(fill = release_year2), alpha = 0.5) + 
+  facet_wrap( ~ marker ) +
+  xlab("Release Era") + 
+  ylab("Rating") + 
+  theme(legend.position = "right") +
+  scale_fill_manual("Release Era",values=c("blue","yellow"))
+
+```
+
+This visual provides a comparison of rating of movies that involve comedy, and movies that don't. This visual also splits the movies into two era's, the 1900's and the 2000's. We can see that the median rating between the two era's within in each respective group are very similar. For movies without comedy the median rating is about 3.5, but for movies with comedy it is lower at about 3.25. In both types of movies there are outlier's on the lower end of rating, these are movies that the raters thought were particularly bad. The IQR for both era's in both groups are about the size and there is probably skewness to the right for both groups.
