@@ -6,3 +6,68 @@ output: html_notebook
 ---
 
 ### Load Packages and Data
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(lubridate)
+options(dplyr.summarise.inform = FALSE)
+Movies <- read.csv("movies.csv", header=T)
+Ratings <- read.csv("ratings.csv", header=T)
+Tags <- read.csv("tags.csv", header=T)
+```
+
+### Data Wrangling (Initial)
+
+*Convert timestamps into dates*
+
+```{r message=FALSE, warning=FALSE}
+Ratings <- mutate(Ratings, rating_date = as_datetime(Ratings$timestamp))
+
+Tags <- mutate(Tags, tag_date = as_datetime(Tags$timestamp))
+
+head(Ratings, 3)
+head(Tags, 3)
+```
+
+*Combine Tags and Ratings*
+
+```{r message=FALSE, warning=FALSE}
+CombinedReview <- Tags %>%
+  inner_join(Ratings, by = c("userId" = "userId", "movieId" = "movieId")) 
+
+CombinedReview <- CombinedReview %>%
+  inner_join(Movies, by = c("movieId" = "movieId")) %>%
+  select(userId, rating, rating_date, tag, tag_date, title, genres)
+
+head(CombinedReview, 3)
+```
+
+*Create new release_year varaiable and remove year from title*
+
+```{r message=FALSE, warning=FALSE}
+pattern1 <- "\\(\\d{4}\\)"
+
+CombinedReview2 <- CombinedReview %>%
+  mutate(release_year1 = str_extract(title,pattern1))
+
+CombinedReview2 <- CombinedReview2 %>%
+  mutate(release_year = parse_number(release_year1)) %>%
+  select(userId, rating, rating_date, tag, tag_date, title, genres, release_year)
+
+CombinedReview2$title <- gsub(pattern1, "", CombinedReview2$title)
+
+head(CombinedReview2, 3)
+```
+
+### Data Visualization
+
+*What were the top 10 rated movie genres?*
+
+```{r message=FALSE, warning=FALSE}
+Ratings <- mutate(Ratings, rating_date = as_datetime(Ratings$timestamp))
+
+Tags <- mutate(Tags, tag_date = as_datetime(Tags$timestamp))
+
+head(Ratings, 3)
+head(Tags, 3)
+```

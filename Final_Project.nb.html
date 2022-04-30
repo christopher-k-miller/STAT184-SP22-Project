@@ -1761,9 +1761,108 @@ pre code {
 <div id="load-packages-and-data" class="section level3">
 <h3>Load Packages and Data</h3>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGx1YnJpZGF0ZSlcbm9wdGlvbnMoZHBseXIuc3VtbWFyaXNlLmluZm9ybSA9IEZBTFNFKVxuTW92aWVzIDwtIHJlYWQuY3N2KFwibW92aWVzLmNzdlwiLCBoZWFkZXI9VClcblJhdGluZ3MgPC0gcmVhZC5jc3YoXCJyYXRpbmdzLmNzdlwiLCBoZWFkZXI9VClcblRhZ3MgPC0gcmVhZC5jc3YoXCJ0YWdzLmNzdlwiLCBoZWFkZXI9VClcbmBgYCJ9 -->
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+options(dplyr.summarise.inform = FALSE)
+Movies &lt;- read.csv(&quot;movies.csv&quot;, header=T)
+Ratings &lt;- read.csv(&quot;ratings.csv&quot;, header=T)
+Tags &lt;- read.csv(&quot;tags.csv&quot;, header=T)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="data-wrangling-initial" class="section level3">
+<h3>Data Wrangling (Initial)</h3>
+<p><em>Convert timestamps into dates</em></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUmF0aW5ncyA8LSBtdXRhdGUoUmF0aW5ncywgcmF0aW5nX2RhdGUgPSBhc19kYXRldGltZShSYXRpbmdzJHRpbWVzdGFtcCkpXG5cblRhZ3MgPC0gbXV0YXRlKFRhZ3MsIHRhZ19kYXRlID0gYXNfZGF0ZXRpbWUoVGFncyR0aW1lc3RhbXApKVxuXG5oZWFkKFJhdGluZ3MsIDMpXG5gYGAifQ== -->
+<pre class="r"><code>Ratings &lt;- mutate(Ratings, rating_date = as_datetime(Ratings$timestamp))
+
+Tags &lt;- mutate(Tags, tag_date = as_datetime(Tags$timestamp))
+
+head(Ratings, 3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6NX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJtMVJ6VTdDUUJBZStodHFKQ1ErQjAyQW1JaGVOSGpoSlBFbjRXYldzbUpqMmVKMks4WVRCOTZIZC9Ec3dadXY0Rk9BcyswT1lHT1R6Y3czL2I2WnlUZlhsNk51TUFvQXdBYW5ab1B0WWdwZWY5anVISGNBSEF0UkRSeW82L2lHckNOTU5PZXdrT2lmdTdkZjA5SEQxOUQ1ZVJPS3J4cEowMXZPVjczbHk2YTN6TDhRRnBxTHo0K3o3d1VBeHBOTkdVOS9Dc21mcGR3b1lWbUdpVzVwbWFJL3ZMb1pqQ0psb0ZkQVZWV3E5MVJ3bzZTaWZYZmJ4N0N1Y2dXYmNwcmlVdHM4NDNJd3BwblQ5RFhtVytoSnBtSXhNYWl1WXRRck5wMlp3a0g1KzM3TUZLL01xc3QwSHRJOGJZKzFLSzJ5UzZLMXFld2NZQk1XUGtxVS9MTzZuODVVbkFwc1p1bmIrUlZ4VGVvTzVtaFF5ZmVKelZ6b3BjYXQ2Q2tYejYxMmQ0OUx4NmZEVSs2V3V6aTBzVS9tY0RHSjBYdHlqbWNabTJ6aG5FbXhzODVOMkFOUERHaWdONFUxNFV6R2d1NGJZRFVMVmFvWThZSW9UYWhTV0FMclg5KzA0THJxQWdBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["userId"],"name":[1],"type":["int"],"align":["right"]},{"label":["movieId"],"name":[2],"type":["int"],"align":["right"]},{"label":["rating"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["timestamp"],"name":[4],"type":["int"],"align":["right"]},{"label":["rating_date"],"name":[5],"type":["S3: POSIXct"],"align":["right"]}],"data":[{"1":"1","2":"1","3":"4","4":"964982703","5":"2000-07-30 18:45:03","_rn_":"1"},{"1":"1","2":"3","3":"4","4":"964981247","5":"2000-07-30 18:20:47","_rn_":"2"},{"1":"1","2":"6","3":"4","4":"964982224","5":"2000-07-30 18:37:04","_rn_":"3"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChUYWdzLCAzKVxuYGBgIn0= -->
+<pre class="r"><code>head(Tags, 3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6NX0sInJkZiI6Ikg0c0lBQUFBQUFBQUJtMVNUVThDTVJEdGZyR3lRU1R4RDNBM2JBVDBCeGc4eUVtaWFMaVpzcFNsc1hTeFcwUThjZmIvZWZNdmVQYUdUa3VMNjhaTm1zNTcrMmJtZGRxYnkxRTNHa1VJSVEvNWpvZThBRUpVNlEzYW5mTU9RcjRMeUVFK3FxcjlCVlRIRUNqTm9VNUJ5QzBzdzMwT2Z4ZHE3RXJyQXNGMHlmbmFnS01ybXM3WXV2bTB6Q1FlTTJMbzJvb3kxcHdTSVFoanR1Yjl5VWNIMWhtc1U0QjF4VjI4djMzVk5naXBYWWswVnViL21nNFNodlBjR0hFTkdRNnViL3VqUkJwWTBWQ1dNK1ZyeG9uSnRLUjNOK3pCdGkxck9aNFQyeVd3WlpjNUVmMko3VG5QbmluWlEwL2kxSVJWU1NGWjR2bkNFQWZ3NzJHQ0pTbDFxWXBzRmR0TzZzenVSaDlZRFYwSjNlK1Myd2lLNEhncUlPVWYwMkcya0RUalVNeFZ0eHFXa2gyaEttaGk5eFhqb3JBQnR3b2RKcTFrdHVTUHJYYTNvSFdNVThjOEZ4c0hPeSsrZFJ6YW1SR2VVazcyTXlONWp0TTlYR0hCS2JkekN4Z2VFMlpBSFdhalJ4TXZCT1gyWmlOZzgxakNDN082S01tWVpmUkkwUFlITkxzdG9nUURBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["userId"],"name":[1],"type":["int"],"align":["right"]},{"label":["movieId"],"name":[2],"type":["int"],"align":["right"]},{"label":["tag"],"name":[3],"type":["chr"],"align":["left"]},{"label":["timestamp"],"name":[4],"type":["int"],"align":["right"]},{"label":["tag_date"],"name":[5],"type":["S3: POSIXct"],"align":["right"]}],"data":[{"1":"2","2":"60756","3":"funny","4":"1445714994","5":"2015-10-24 19:29:54","_rn_":"1"},{"1":"2","2":"60756","3":"Highly quotable","4":"1445714996","5":"2015-10-24 19:29:56","_rn_":"2"},{"1":"2","2":"60756","3":"will ferrell","4":"1445714992","5":"2015-10-24 19:29:52","_rn_":"3"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><em>Combine Tags and Ratings</em></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQ29tYmluZWRSZXZpZXcgPC0gVGFncyAlPiVcbiAgaW5uZXJfam9pbihSYXRpbmdzLCBieSA9IGMoXCJ1c2VySWRcIiA9IFwidXNlcklkXCIsIFwibW92aWVJZFwiID0gXCJtb3ZpZUlkXCIpKSBcblxuQ29tYmluZWRSZXZpZXcgPC0gQ29tYmluZWRSZXZpZXcgJT4lXG4gIGlubmVyX2pvaW4oTW92aWVzLCBieSA9IGMoXCJtb3ZpZUlkXCIgPSBcIm1vdmllSWRcIikpICU+JVxuICBzZWxlY3QodXNlcklkLCByYXRpbmcsIHJhdGluZ19kYXRlLCB0YWcsIHRhZ19kYXRlLCB0aXRsZSwgZ2VucmVzKVxuXG5oZWFkKENvbWJpbmVkUmV2aWV3LCAzKVxuYGBgIn0= -->
+<pre class="r"><code>CombinedReview &lt;- Tags %&gt;%
+  inner_join(Ratings, by = c(&quot;userId&quot; = &quot;userId&quot;, &quot;movieId&quot; = &quot;movieId&quot;)) 
+
+CombinedReview &lt;- CombinedReview %&gt;%
+  inner_join(Movies, by = c(&quot;movieId&quot; = &quot;movieId&quot;)) %&gt;%
+  select(userId, rating, rating_date, tag, tag_date, title, genres)
+
+head(CombinedReview, 3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MywibmNvbCI6N30sInJkZiI6Ikg0c0lBQUFBQUFBQUJwMVNUVS9DTUJqdVBtQXlRVW5rQit5b0J4WkFUVHlxZUpDVFJEVGhaZ3FVc1ZnNjdMb2duamo3Ly93dDNzQjNXenZIRGtadDB2UjkzcTgrNzhmOXpmRFVIdG9JSVFPWm1vR01Fb2lvM08yM08rY2RoRXdka0laTVZJbmZWL0E2QXNHQ1cwdENFTkp6OXlEV1hUWlFjb292bUJMNzFjZjdaNXl0K0JZK0s0MHBEa01RNmtueVZHbjE3d2E5NFZoSVdFNmdLRWFLdDRBUkdhbVV4dU5ERjU2TlZCdktkeG94dHBMZzhOYjNablRsdkVTQndDTktwTHE2OUNsMXBvUnpRbW0raXVvNlpWK1RWVlN6S3ZUdEg0Z2IyOTl4YlF3RVdUalhQQkF6d2tQbnVOTnFYWno4MjdhYnU5d041bVN5K2hFVnVzenduS2o1V01vMUNnbnZUUlRpV1BqTWsyZy9SVThUTEZSbkRZR1ZkUS9Fdktra2ZKRk5vT3dSeHVQUGRoaFVlTEIwRll0NEJ2cGE3bGxoQ0NyQWh2elluWElJU2R1N2s4NEtGc0lQR0NUVDFZN25nelVlWjBnVTZjbkxlY2M2YkJUOE1HbU9aeEY3YnJiUGNyNmFaS3FsTERQWlNybVlpbkhXVDhJOG42azJXRkJxaUwwTUxqRm4zLzB0VVR3aVZJSUQ2RTNTR25mQmZhYld6Z1p0NkFyWWJ1Vm5qd09xTk9uR2JiNEFnMkU3bEJJRUFBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["userId"],"name":[1],"type":["int"],"align":["right"]},{"label":["rating"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["rating_date"],"name":[3],"type":["S3: POSIXct"],"align":["right"]},{"label":["tag"],"name":[4],"type":["chr"],"align":["left"]},{"label":["tag_date"],"name":[5],"type":["S3: POSIXct"],"align":["right"]},{"label":["title"],"name":[6],"type":["chr"],"align":["left"]},{"label":["genres"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"2","2":"5","3":"2015-10-24 19:29:40","4":"funny","5":"2015-10-24 19:29:54","6":"Step Brothers (2008)","7":"Comedy","_rn_":"1"},{"1":"2","2":"5","3":"2015-10-24 19:29:40","4":"Highly quotable","5":"2015-10-24 19:29:56","6":"Step Brothers (2008)","7":"Comedy","_rn_":"2"},{"1":"2","2":"5","3":"2015-10-24 19:29:40","4":"will ferrell","5":"2015-10-24 19:29:52","6":"Step Brothers (2008)","7":"Comedy","_rn_":"3"}],"options":{"columns":{"min":{},"max":[10],"total":[7]},"rows":{"min":[10],"max":[10],"total":[3]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><em>Create new release_year varaiable and remove year from title</em></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGF0dGVybjEgPC0gXCJcXFxcKFxcXFxkezR9XFxcXClcIlxuXG5Db21iaW5lZFJldmlldzIgPC0gQ29tYmluZWRSZXZpZXcgJT4lXG4gIG11dGF0ZShyZWxlYXNlX3llYXIxID0gc3RyX2V4dHJhY3QodGl0bGUscGF0dGVybjEpKVxuXG5Db21iaW5lZFJldmlldzIgPC0gQ29tYmluZWRSZXZpZXcyICU+JVxuICBtdXRhdGUocmVsZWFzZV95ZWFyID0gcGFyc2VfbnVtYmVyKHJlbGVhc2VfeWVhcjEpKSAlPiVcbiAgc2VsZWN0KHVzZXJJZCwgcmF0aW5nLCByYXRpbmdfZGF0ZSwgdGFnLCB0YWdfZGF0ZSwgdGl0bGUsIGdlbnJlcywgcmVsZWFzZV95ZWFyKVxuXG5Db21iaW5lZFJldmlldzIkdGl0bGUgPC0gZ3N1YihwYXR0ZXJuMSwgXCJcIiwgQ29tYmluZWRSZXZpZXcyJHRpdGxlKVxuXG5oZWFkKENvbWJpbmVkUmV2aWV3MiwgMylcbmBgYCJ9 -->
+<pre class="r"><code>pattern1 &lt;- &quot;\\(\\d{4}\\)&quot;
+
+CombinedReview2 &lt;- CombinedReview %&gt;%
+  mutate(release_year1 = str_extract(title,pattern1))
+
+CombinedReview2 &lt;- CombinedReview2 %&gt;%
+  mutate(release_year = parse_number(release_year1)) %&gt;%
+  select(userId, rating, rating_date, tag, tag_date, title, genres, release_year)
+
+CombinedReview2$title &lt;- gsub(pattern1, &quot;&quot;, CombinedReview2$title)
+
+head(CombinedReview2, 3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="data-visualization" class="section level3">
+<h3>Data Visualization</h3>
+<p><em>What were the top 10 rated movie genres?</em></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUmF0aW5ncyA8LSBtdXRhdGUoUmF0aW5ncywgcmF0aW5nX2RhdGUgPSBhc19kYXRldGltZShSYXRpbmdzJHRpbWVzdGFtcCkpXG5cblRhZ3MgPC0gbXV0YXRlKFRhZ3MsIHRhZ19kYXRlID0gYXNfZGF0ZXRpbWUoVGFncyR0aW1lc3RhbXApKVxuXG5oZWFkKFJhdGluZ3MsIDMpXG5oZWFkKFRhZ3MsIDMpXG5gYGAifQ== -->
+<pre class="r"><code>Ratings &lt;- mutate(Ratings, rating_date = as_datetime(Ratings$timestamp))
+
+Tags &lt;- mutate(Tags, tag_date = as_datetime(Tags$timestamp))
+
+head(Ratings, 3)
+head(Tags, 3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbmFsIFByb2plY3QiDQphdXRob3I6ICJDaHJpcyBNaWxsZXIiDQpkYXRlOiAiNS8yLzIwMjIiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyMgTG9hZCBQYWNrYWdlcyBhbmQgRGF0YQ==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkZpbmFsIFByb2plY3QiDQphdXRob3I6ICJDaHJpcyBNaWxsZXIiDQpkYXRlOiAiNS8yLzIwMjIiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyMgTG9hZCBQYWNrYWdlcyBhbmQgRGF0YQ0KDQpgYGB7ciBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGx1YnJpZGF0ZSkNCm9wdGlvbnMoZHBseXIuc3VtbWFyaXNlLmluZm9ybSA9IEZBTFNFKQ0KTW92aWVzIDwtIHJlYWQuY3N2KCJtb3ZpZXMuY3N2IiwgaGVhZGVyPVQpDQpSYXRpbmdzIDwtIHJlYWQuY3N2KCJyYXRpbmdzLmNzdiIsIGhlYWRlcj1UKQ0KVGFncyA8LSByZWFkLmNzdigidGFncy5jc3YiLCBoZWFkZXI9VCkNCmBgYA0KDQojIyMgRGF0YSBXcmFuZ2xpbmcgKEluaXRpYWwpDQoNCipDb252ZXJ0IHRpbWVzdGFtcHMgaW50byBkYXRlcyoNCg0KYGBge3IgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NClJhdGluZ3MgPC0gbXV0YXRlKFJhdGluZ3MsIHJhdGluZ19kYXRlID0gYXNfZGF0ZXRpbWUoUmF0aW5ncyR0aW1lc3RhbXApKQ0KDQpUYWdzIDwtIG11dGF0ZShUYWdzLCB0YWdfZGF0ZSA9IGFzX2RhdGV0aW1lKFRhZ3MkdGltZXN0YW1wKSkNCg0KaGVhZChSYXRpbmdzLCAzKQ0KaGVhZChUYWdzLCAzKQ0KYGBgDQoNCipDb21iaW5lIFRhZ3MgYW5kIFJhdGluZ3MqDQoNCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQpDb21iaW5lZFJldmlldyA8LSBUYWdzICU+JQ0KICBpbm5lcl9qb2luKFJhdGluZ3MsIGJ5ID0gYygidXNlcklkIiA9ICJ1c2VySWQiLCAibW92aWVJZCIgPSAibW92aWVJZCIpKSANCg0KQ29tYmluZWRSZXZpZXcgPC0gQ29tYmluZWRSZXZpZXcgJT4lDQogIGlubmVyX2pvaW4oTW92aWVzLCBieSA9IGMoIm1vdmllSWQiID0gIm1vdmllSWQiKSkgJT4lDQogIHNlbGVjdCh1c2VySWQsIHJhdGluZywgcmF0aW5nX2RhdGUsIHRhZywgdGFnX2RhdGUsIHRpdGxlLCBnZW5yZXMpDQoNCmhlYWQoQ29tYmluZWRSZXZpZXcsIDMpDQpgYGANCg0KKkNyZWF0ZSBuZXcgcmVsZWFzZV95ZWFyIHZhcmFpYWJsZSBhbmQgcmVtb3ZlIHllYXIgZnJvbSB0aXRsZSoNCg0KYGBge3IgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCnBhdHRlcm4xIDwtICJcXChcXGR7NH1cXCkiDQoNCkNvbWJpbmVkUmV2aWV3MiA8LSBDb21iaW5lZFJldmlldyAlPiUNCiAgbXV0YXRlKHJlbGVhc2VfeWVhcjEgPSBzdHJfZXh0cmFjdCh0aXRsZSxwYXR0ZXJuMSkpDQoNCkNvbWJpbmVkUmV2aWV3MiA8LSBDb21iaW5lZFJldmlldzIgJT4lDQogIG11dGF0ZShyZWxlYXNlX3llYXIgPSBwYXJzZV9udW1iZXIocmVsZWFzZV95ZWFyMSkpICU+JQ0KICBzZWxlY3QodXNlcklkLCByYXRpbmcsIHJhdGluZ19kYXRlLCB0YWcsIHRhZ19kYXRlLCB0aXRsZSwgZ2VucmVzLCByZWxlYXNlX3llYXIpDQoNCkNvbWJpbmVkUmV2aWV3MiR0aXRsZSA8LSBnc3ViKHBhdHRlcm4xLCAiIiwgQ29tYmluZWRSZXZpZXcyJHRpdGxlKQ0KDQpoZWFkKENvbWJpbmVkUmV2aWV3MiwgMykNCmBgYA0KDQojIyMgRGF0YSBWaXN1YWxpemF0aW9uDQoNCipXaGF0IHdlcmUgdGhlIHRvcCAxMCByYXRlZCBtb3ZpZSBnZW5yZXM/Kg0KDQpgYGB7ciBtZXNzYWdlPUZBTFNFLCB3YXJuaW5nPUZBTFNFfQ0KUmF0aW5ncyA8LSBtdXRhdGUoUmF0aW5ncywgcmF0aW5nX2RhdGUgPSBhc19kYXRldGltZShSYXRpbmdzJHRpbWVzdGFtcCkpDQoNClRhZ3MgPC0gbXV0YXRlKFRhZ3MsIHRhZ19kYXRlID0gYXNfZGF0ZXRpbWUoVGFncyR0aW1lc3RhbXApKQ0KDQpoZWFkKFJhdGluZ3MsIDMpDQpoZWFkKFRhZ3MsIDMpDQpgYGA=</div>
 
 
 
