@@ -1,0 +1,8 @@
+---
+title: "Final Project"
+author: "Chris Miller"
+date: "5/2/2022"
+output: html_notebook
+---
+
+### Load Packages and Data
